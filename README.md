@@ -2,16 +2,23 @@
 
 This module is a critical tool for debugging Node.js C/C++ native code modules, and is safe to use in production environments.  Normally, when a bug is triggered in native code, the node process simply ends with no helpful information.  In production, this can manifest as worker processes restarting for seemingly no reason.  Running node in gdb is messy and infeasible for a production environment.  Instead this module will sit unobtrusively doing nothing (zero perf impact) as long as Node is well-behaved.  If a SIGSEGV signal is raised, the module will print a native stack trace to both STDERR and to a timestamped file (STDERR is usually ignored in production environments.  files are better).
 
+
 Using the module is as simple as:
 
-```javascript
+Install Dependencies: 
 
+```javascript
+npm install bindings
+```
+
+And add the following code: 
+
+```javascript
 var SegfaultHandler = require('segfault-handler');
 
 SegfaultHandler.registerHandler();
 
 SegfaultHandler.causeSegfault(); // simulates a buggy native module that dereferences NULL
-
 ```
 
 Obviously, you would only include the first two lines in your own code; the third is for testing purposes and to demonstrate functionality.
